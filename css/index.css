@@ -1,0 +1,61 @@
+* {
+    -webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
+}
+
+body {
+    -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
+    -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
+    -webkit-user-select: text;                  /* prevent copy paste, to allow, change 'none' to 'text' */
+}
+
+.second-page-list-item div p
+{
+    margin: 5px;
+}
+.second-page-list-item div
+{
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+a:link {
+    text-decoration: none;
+}
+
+a:visited {
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+a:active {
+    text-decoration: underline;
+}
+
+#stationMap {
+    height: 300px;
+    min-height: 30vh;
+    max-height: 50vh;
+    width: 100%;
+}
+
+/* --------------- google maps station popup: --------------- */
+
+#siteNotice {
+    height: 50%;
+    width: 50%;
+    text-align: center;
+}
+
+#firstHeading {
+    margin: auto;
+    text-align: center;
+}
+
+#locationImage {
+    margin: auto;
+    text-align: center;
+    height: 100px;
+}
+
+/* ---------------------------------------------------------- */

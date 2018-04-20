@@ -1,0 +1,67 @@
+{
+  "name": "OV-fiets",
+  "extra": {
+    "fetchTime": 1490826868,
+    "rentalBikes": "8",
+    "locationCode": "utt001"
+  },
+  "apps": [],
+  "sites": [],
+  "lat": 52.10017,
+  "link": {
+    "params": {},
+    "uri": "https://places.ns-mlab.nl/api/v2/places/station-retail/OV-fiets-utt001"
+  },
+  "stationCode": "UTT",
+  "openingHours": [
+    {
+      "dayOfWeek": 1,
+      "endTime": "00:00",
+      "closesNextDay": true,
+      "startTime": "00:00"
+    },
+    {
+      "dayOfWeek": 2,
+      "endTime": "00:00",
+      "closesNextDay": true,
+      "startTime": "00:00"
+    },
+    {
+      "dayOfWeek": 3,
+      "endTime": "00:00",
+      "closesNextDay": true,
+      "startTime": "00:00"
+    },
+    {
+      "dayOfWeek": 4,
+      "endTime": "00:00",
+      "closesNextDay": true,
+      "startTime": "00:00"
+    },
+    {
+      "dayOfWeek": 5,
+      "endTime": "00:00",
+      "closesNextDay": true,
+      "startTime": "00:00"
+    },
+    {
+      "dayOfWeek": 6,
+      "endTime": "00:00",
+      "closesNextDay": true,
+      "startTime": "00:00"
+    },
+    {
+      "dayOfWeek": 7,
+      "endTime": "00:00",
+      "closesNextDay": true,
+      "startTime": "00:00"
+    }
+  ],
+  "lng": 5.04424,
+  "open": "Yes",
+  "thumbnail": {
+    "params": {},
+    "uri": "api/v1/location/thumbnail/52.10017,5.04424"
+  },
+  "description": "Utrecht Terwijde"
+}
