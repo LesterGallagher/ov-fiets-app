@@ -11,6 +11,8 @@ var isOnline = function () {
 	});
 };
 
+ons.disableAutoStatusBarFill();
+
 if (window.addEventListener) {
 	/*
 		Works well in Firefox and Opera with the 
@@ -40,7 +42,11 @@ document.addEventListener("resume", function () {
 
 document.addEventListener("deviceready", function () {
 	cordova_ready = true;
-	if (cordova.platformId === 'browser') document.body.appendChild(document.createElement('script')).src = './js/browser.js';
+	if (cordova.platformId === 'browser') {
+		document.body.appendChild(document.createElement('script')).src = './js/browser.js';
+	} else {
+		document.body.appendChild(document.createElement('script')).src = './js/admob.js';
+	}
 	if (navigator.onLine === false) {
 		ons.notification.alert({
 			message: 'Je bent niet verbonden met het internet. De gegevens die worden weergegeven zijn mogelijk verouderd.n',

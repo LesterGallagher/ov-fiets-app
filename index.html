@@ -1,9 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="nl-NL">
 
 <head>
 
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com http://*.tile.osm.org https://*.googleapis.com ws: 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://*.gstatic.com http://*.tile.osm.org https://*.googleapis.com; media-src *; font-src 'self' https://*.gstatic.com http://*.tile.osm.org https://*.googleapis.com; img-src 'self' https://*.gstatic.com http://*.tile.osm.org https://*.googleapis.com https://places.ns-mlab.nl data: content:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.gstatic.com http://*.tile.osm.org https://maps.googleapis.com; connect-src 'self' https://*.gstatic.com http://*.openov.nl https://*.googleapis.com;">
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self' data: gap: https://ssl.gstatic.com http://*.tile.osm.org https://*.googleapis.com; 
+        style-src 'self' 'unsafe-inline' https://*.gstatic.com http://*.tile.osm.org https://*.googleapis.com;
+        media-src *; 
+        font-src 'self' https://*.gstatic.com http://*.tile.osm.org https://*.googleapis.com;
+        img-src 'self' https://*.gstatic.com http://*.tile.osm.org https://*.googleapis.com https://places.ns-mlab.nl data: content:;
+        script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.gstatic.com http://*.tile.osm.org https://maps.googleapis.com;
+        connect-src 'self' https://*.gstatic.com http://*.openov.nl https://*.googleapis.com; ">
     <meta name="format-detection" content="telephone=no">
     <meta name="msapplication-tap-highlight" content="no">
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
@@ -22,13 +29,14 @@
     <meta name="application-name" content="OV Fiets App">
     <meta name="msapplication-TileColor" content="#2b5797">
     <meta name="theme-color" content="#eac216">
+    <meta name="description" content="Met de OV Fiets Website kunt u gemakkelijk informatie opzoeken over OV Fiets huurlocaties.">
+    <meta name="author" content="Sem Postma, sem.postma@gmail.com">
+    <meta name="keywords" content="Ov, Fiets, App, Website, Informatie, Vervoer, Verkeer, Openbaar, Huur, Locaties, Browser, Google, Play">
 
-    <link rel="stylesheet" href="lib/onsen/css/onsenui.css">
-    <link rel="stylesheet" href="lib/onsen/css/onsen-css-components.min.css">
-    
+    <link rel="stylesheet" href="lib/onsen/css/onsenui.css" />
+    <link rel="stylesheet" href="lib/onsen/css/onsen-css-components.min.css" />
+
     <link rel="stylesheet" type="text/css" href="css/index.css">
-    <script src="lib/onsen/js/onsenui.min.js"></script>
-    <script src="js/admob.js"></script>
 
     <title>OV Fiets App</title>
 </head>
@@ -42,17 +50,19 @@
                 <div class="center">OV Fiets App</div>
                 <div class="right">
                     <ons-toolbar-button onclick=" document.querySelector('#Navigator').pushPage('about.html');">
-                    <ons-icon icon="ion-help"></ons-icon> 
-                </ons-toolbar-button>
+                        <ons-icon icon="ion-help"></ons-icon>
+                    </ons-toolbar-button>
                 </div>
             </ons-toolbar>
             <div id="main-page-wrapper" style="padding:0px 10px">
 
                 <ons-list modifier="inset" style="margin: 10px 0px; width:100%;">
 
-                    <ons-list-item nodivider="">
+                    <ons-list-item nodivider>
                         <div class="left">
-                            <p style="margin:0px"><ons-input id="inputStation" placeholder="Huurlocatie" float=""></ons-input></p>
+                            <p style="margin:0px">
+                                <ons-input id="inputStation" placeholder="Huurlocatie" float>
+                            </p>
                         </div>
                         <div class="right">
                             <ons-button id="go-button">Go!</ons-button>
@@ -62,12 +72,17 @@
                 </ons-list>
                 <ons-list modifier="inset" id="suggestionList" style="width:100%; margin: 10px 0px;">
                 </ons-list>
+                <section style="display: none; margin-bottom: 8px;" class="add-to-homescreen" style="margin-bottom: 8px;">
+                    <ons-button onclick="pwaHomeScreenInstall()" modifier="large">
+                        Toevoegen aan Startscherm/Bureaublad
+                        <small>(aanbevolen)</small>
+                    </ons-button>
+                </section>
             </div>
-
         </ons-page>
     </ons-template>
 
-<!--   ******************************************************************************************************************************** -->
+    <!--   ******************************************************************************************************************************** -->
 
     <ons-template id="fietsen.html">
         <ons-page id="secondary-page">
@@ -83,102 +98,133 @@
                 <p id="refreshInfo">Pull to refresh</p>
 
                 <div id="informationParent">
-                <ons-list>
-                    <ons-list-header>Locatie</ons-list-header>
-                    <ons-list-item class="second-page-list-item"><p id="stationName"></p></ons-list-item>
-                    <ons-list-item class="second-page-list-item"><div id="stationMap" ontouchmove="blockTouchMove(event)"></div></ons-list-item>
+                    <ons-list>
+                        <ons-list-header>Locatie</ons-list-header>
+                        <ons-list-item class="second-page-list-item">
+                            <p id="stationName"></p>
+                        </ons-list-item>
+                        <ons-list-item class="second-page-list-item">
+                            <div id="stationMap" ontouchmove="blockTouchMove(event)"></div>
+                        </ons-list-item>
 
-                    <ons-list-header>Status</ons-list-header>
-                    <ons-list-item class="second-page-list-item"><p id="openClosed"></p></ons-list-item>
+                        <ons-list-header>Status</ons-list-header>
+                        <ons-list-item class="second-page-list-item">
+                            <p id="openClosed"></p>
+                        </ons-list-item>
 
-                    <ons-list-header>OV Fietsen</ons-list-header>
-                    <ons-list-item class="second-page-list-item"><p id="rentalBikesCount"></p></ons-list-item>
+                        <ons-list-header>OV Fietsen</ons-list-header>
+                        <ons-list-item class="second-page-list-item">
+                            <p id="rentalBikesCount"></p>
+                        </ons-list-item>
 
-                    <ons-list-header>Laatste Update</ons-list-header>
-                    <ons-list-item class="second-page-list-item"><p id="lastUpdated"></p></ons-list-item>
+                        <ons-list-header>Laatste Update</ons-list-header>
+                        <ons-list-item class="second-page-list-item">
+                            <p id="lastUpdated"></p>
+                        </ons-list-item>
 
-                    <ons-list-header>OpeningsTijden</ons-list-header>
-                    <ons-list-item class="second-page-list-item" id="times">
-                        <ons-list class="second-page-list-item" modifier="inset" style="width:75%;">
-                            <ons-list-header>Maandag</ons-list-header>
-                            <ons-list-item class="second-page-list-item"><p id="monday"></p></ons-list-item>
+                        <ons-list-header>OpeningsTijden</ons-list-header>
+                        <ons-list-item class="second-page-list-item" id="times">
+                            <ons-list class="second-page-list-item" modifier="inset" style="width:75%;">
+                                <ons-list-header>Maandag</ons-list-header>
+                                <ons-list-item class="second-page-list-item">
+                                    <p id="monday"></p>
+                                </ons-list-item>
 
-                            <ons-list-header>Dinsdag</ons-list-header>
-                            <ons-list-item class="second-page-list-item"><p id="tuesday"></p></ons-list-item>
+                                <ons-list-header>Dinsdag</ons-list-header>
+                                <ons-list-item class="second-page-list-item">
+                                    <p id="tuesday"></p>
+                                </ons-list-item>
 
-                            <ons-list-header>Woensdag</ons-list-header>
-                            <ons-list-item class="second-page-list-item"><p id="wednesday"></p></ons-list-item>
+                                <ons-list-header>Woensdag</ons-list-header>
+                                <ons-list-item class="second-page-list-item">
+                                    <p id="wednesday"></p>
+                                </ons-list-item>
 
-                            <ons-list-header>Donderdag</ons-list-header>
-                            <ons-list-item class="second-page-list-item"><p id="thursday"></p></ons-list-item>
+                                <ons-list-header>Donderdag</ons-list-header>
+                                <ons-list-item class="second-page-list-item">
+                                    <p id="thursday"></p>
+                                </ons-list-item>
 
-                            <ons-list-header>Vrijdag</ons-list-header>
-                            <ons-list-item class="second-page-list-item"><p id="friday"></p></ons-list-item>
+                                <ons-list-header>Vrijdag</ons-list-header>
+                                <ons-list-item class="second-page-list-item">
+                                    <p id="friday"></p>
+                                </ons-list-item>
 
-                            <ons-list-header>Zaterdag</ons-list-header>
-                            <ons-list-item class="second-page-list-item"><p id="saturday"></p></ons-list-item>
+                                <ons-list-header>Zaterdag</ons-list-header>
+                                <ons-list-item class="second-page-list-item">
+                                    <p id="saturday"></p>
+                                </ons-list-item>
 
-                            <ons-list-header>Zondag</ons-list-header>
-                            <ons-list-item class="second-page-list-item"><p id="sunday"></p></ons-list-item>
-                    
-                        </ons-list>
-                    </ons-list-item>
+                                <ons-list-header>Zondag</ons-list-header>
+                                <ons-list-item class="second-page-list-item">
+                                    <p id="sunday"></p>
+                                </ons-list-item>
 
-
-                 </ons-list>
+                            </ons-list>
+                        </ons-list-item>
+                    </ons-list>
                 </div>
-
             </ons-pull-hook>
-
         </ons-page>
     </ons-template>
 
-<!-- ******************************************************************************************************************************** -->
+    <!-- ******************************************************************************************************************************** -->
 
     <ons-template id="about.html">
         <ons-page>
             <ons-toolbar>
                 <!-- onclick="document.querySelector('#Navigator').pushPage('main.html');"-->
-                <div class="left"><ons-back-button>Back</ons-back-button></div>
+                <div class="left">
+                    <ons-back-button>Back</ons-back-button>
+                </div>
                 <div class="center">About</div>
             </ons-toolbar>
             <div style="margin: 10px;" id="aboutPageContentWrapper">
-                
-                <h2>Informatie</h2>
-                <br>
-                <p>
-                    Met de OV Fiets App kunt u gemakkelijk informatie opzoeken over OV Fiets huurlocaties. 
-                    U kunt de zoekbalk bovenaan de homepage van de app gebruiken om locaties te zoeken.
-                    Onder de zoekbalk worden suggesties weergegeven waaruit u een keuze kunt maken.
-                    Wanneer u de juiste locatie heeft gevonden, klikt u het knopje "Go" rechts bovenaan de pagina aan.
-                    Hierna krijgt u een lijst te zien met informatie, waaronder:</p>
-                    <ul>
-                        <li>Locatie</li>
-                        <li>Status (Open/Gesloten)</li>
-                        <li>Het aantal fietsen wat beschikbaar is</li>
-                        <li>Het aantal minuten sinds de laatste update</li>
-                        <li>Openingstijden</li>
-                        <li>En een interactieve visuele representatie voor de openingstijden</li>
-                    </ul>
-                    Zo kunt u met één gemakkelijk zoekfunctie direct informatie verkrijgen over alle OV Fiets Locaties in Nederland en zo voorkomen dat je voor verrassingen komt te staan.
-                <p></p>
 
-                <p>De OV Fiets app maakt gebruik van een externe API, wat deel uitmaakt van het 
-                    <a href="http://openov.nl/">openOV</a> data bestand. De API is ontwikkeld door het NS-lab.
-                    Deze applicatie is bedoelt als hulpmiddel en niet iets waar men van afhankelijk dient te zijn. De ontwikkelaars van deze applicatie zijn niet verantwoordelijk voor de gevolgen van onjuist weergegeven informatie.
+                <h2>Informatie</h2>
+                <section style="display: none;" class="add-to-homescreen" style="margin-bottom: 8px;">
+                    <ons-button onclick="pwaHomeScreenInstall()">
+                        Toevoegen aan Startscherm/Bureaublad
+                        <small>(aanbevolen)</small>
+                    </ons-button>
+                </section>
+                <p>
+                    Met de OV Fiets App kunt u gemakkelijk informatie opzoeken over OV Fiets huurlocaties. U kunt de zoekbalk bovenaan de homepage
+                    van de app gebruiken om locaties te zoeken. Onder de zoekbalk worden suggesties weergegeven waaruit u
+                    een keuze kunt maken. Wanneer u de juiste locatie heeft gevonden, klikt u het knopje "Go" rechts bovenaan
+                    de pagina aan. Hierna krijgt u een lijst te zien met informatie, waaronder:</p>
+                <ul>
+                    <li>Locatie</li>
+                    <li>Status (Open/Gesloten)</li>
+                    <li>Het aantal fietsen wat beschikbaar is</li>
+                    <li>Het aantal minuten sinds de laatste update</li>
+                    <li>Openingstijden</li>
+                    <li>En een interactieve visuele representatie voor de openingstijden</li>
+                </ul>
+                Zo kunt u met één gemakkelijk zoekfunctie direct informatie verkrijgen over alle OV Fiets Locaties in Nederland en zo voorkomen
+                dat je voor verrassingen komt te staan.
+                </p>
+
+                <p>De OV Fiets app maakt gebruik van een externe API, wat deel uitmaakt van het
+                    <a href="http://openov.nl/">openOV</a> data bestand. De API is ontwikkeld door het NS-lab. Deze applicatie is bedoelt als hulpmiddel
+                    en niet iets waar men van afhankelijk dient te zijn. De ontwikkelaars van deze applicatie zijn niet verantwoordelijk
+                    voor de gevolgen van onjuist weergegeven informatie.
                 </p>
 
                 <p>Onze privacy-policy kunt u hier vinden:</p>
-                <p><a href="https://echosierrastudio.github.io/EchoSierraStudio/privacy-policy.html">Privacy - Policy</a></p>
+                <p>
+                    <a href="https://echosierrastudio.github.io/EchoSierraStudio/privacy-policy.html">Privacy - Policy</a>
+                </p>
 
             </div>
 
         </ons-page>
     </ons-template>
 
-<!-- ******************************************************************************************************************************** -->
+    <!-- ******************************************************************************************************************************** -->
 
     <script src="cordova.js"></script>
+    <script src="lib/onsen/js/onsenui.min.js"></script>
     <script src="js/core.js"></script>
     <script src="js/index.js"></script>
     <script src="js/interactivity.js"></script>

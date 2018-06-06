@@ -7,7 +7,7 @@
     <author email="polyismstudio@gmail.com" href="http://polyism.portfoliobox.net/">
         Sem Postma
     </author>
-    <content src="browser-sync-start.html" />
+    <content src="index.html" />
     <access origin="*" />
     <allow-navigation href="*" />
     <allow-intent href="http://*/*" />
@@ -17,5 +17,4 @@
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
     <preference name="orientation" value="portrait" />
-    <allow-navigation href="*" />
 </widget>
