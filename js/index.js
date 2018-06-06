@@ -171,7 +171,7 @@ function pullHookChangeStateEventHandler(event) {
 
 function RequestAPIData(callback) {
 
-	httpGetJSONRequest("http://fiets.openov.nl/locaties.json", function (data) {
+	httpGetJSONRequest("https://jsonp.afeld.me/?callback=?&url=http://fiets.openov.nl/locaties.json", function (data) {
 		//console.log(data);
 		station_data = data.locaties;
 		station_abrevs = {};
