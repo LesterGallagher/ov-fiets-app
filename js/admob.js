@@ -16,18 +16,17 @@ if( /(android)/i.test(navigator.userAgent) ) {
 }
 
 function initApp() {
-  if (! AdMob ) {
+  if (!window.cordova || window.cordova.platformId === 'browser') return;
+  if (! window.AdMob ) {
       //try again after 1 second.
-      setTimeout(function() {
-          initApp();
-      }, 1000);
+      setTimeout(initApp, 1000);
       return;
   }
 
   // this will create a banner on startup
-  AdMob.createBanner( {
+  window.AdMob.createBanner( {
     adId: admobid.banner,
-    position: AdMob.AD_POSITION.BOTTOM_CENTER,
+    position: window.AdMob.AD_POSITION.BOTTOM_CENTER,
     //isTesting: true, // TODO: remove this line when release
     overlap: false,
     offsetTopBar: false,
