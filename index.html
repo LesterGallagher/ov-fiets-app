@@ -3,7 +3,14 @@
 
 <head>
 
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com http://*.tile.osm.org https://*.googleapis.com ws: 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://*.gstatic.com http://*.tile.osm.org https://*.googleapis.com; media-src *; font-src 'self' https://*.gstatic.com http://*.tile.osm.org https://*.googleapis.com; img-src 'self' https://*.gstatic.com http://*.tile.osm.org https://*.googleapis.com https://places.ns-mlab.nl data: content:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.gstatic.com http://*.tile.osm.org https://maps.googleapis.com; connect-src 'self' https://*.gstatic.com http://*.openov.nl https://*.googleapis.com;">
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self' data: gap: https://ssl.gstatic.com http://*.tile.osm.org https://*.googleapis.com; 
+        style-src 'self' 'unsafe-inline' https://*.gstatic.com http://*.tile.osm.org https://*.googleapis.com;
+        media-src *; 
+        font-src 'self' https://*.gstatic.com http://*.tile.osm.org https://*.googleapis.com;
+        img-src 'self' https://*.gstatic.com http://*.tile.osm.org https://*.googleapis.com https://places.ns-mlab.nl data: content:;
+        script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.gstatic.com http://*.tile.osm.org https://maps.googleapis.com;
+        connect-src 'self' https://*.gstatic.com http://*.openov.nl https://*.googleapis.com; ">
     <meta name="format-detection" content="telephone=no">
     <meta name="msapplication-tap-highlight" content="no">
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
@@ -26,8 +33,8 @@
     <meta name="author" content="Sem Postma, sem.postma@gmail.com">
     <meta name="keywords" content="Ov, Fiets, App, Website, Informatie, Vervoer, Verkeer, Openbaar, Huur, Locaties, Browser, Google, Play">
 
-    <link rel="stylesheet" href="lib/onsen/css/onsenui.css">
-    <link rel="stylesheet" href="lib/onsen/css/onsen-css-components.min.css">
+    <link rel="stylesheet" href="lib/onsen/css/onsenui.css" />
+    <link rel="stylesheet" href="lib/onsen/css/onsen-css-components.min.css" />
 
     <link rel="stylesheet" type="text/css" href="css/index.css">
 
@@ -51,11 +58,11 @@
 
                 <ons-list modifier="inset" style="margin: 10px 0px; width:100%;">
 
-                    <ons-list-item nodivider="">
+                    <ons-list-item nodivider>
                         <div class="left">
                             <p style="margin:0px">
-                                <ons-input id="inputStation" placeholder="Huurlocatie" float="">
-                            </ons-input></p>
+                                <ons-input id="inputStation" placeholder="Huurlocatie" float>
+                            </p>
                         </div>
                         <div class="right">
                             <ons-button id="go-button">Go!</ons-button>
@@ -65,7 +72,7 @@
                 </ons-list>
                 <ons-list modifier="inset" id="suggestionList" style="width:100%; margin: 10px 0px;">
                 </ons-list>
-                <section style="display: none; margin-bottom: 8px;" class="add-to-homescreen">
+                <section style="display: none; margin-bottom: 8px;" class="add-to-homescreen" style="margin-bottom: 8px;">
                     <ons-button onclick="pwaHomeScreenInstall()" modifier="large">
                         Toevoegen aan Startscherm/Bureaublad
                         <small>(aanbevolen)</small>
@@ -175,7 +182,7 @@
             <div style="margin: 10px;" id="aboutPageContentWrapper">
 
                 <h2>Informatie</h2>
-                <section style="display: none;" class="add-to-homescreen">
+                <section style="display: none;" class="add-to-homescreen" style="margin-bottom: 8px;">
                     <ons-button onclick="pwaHomeScreenInstall()">
                         Toevoegen aan Startscherm/Bureaublad
                         <small>(aanbevolen)</small>
@@ -196,7 +203,7 @@
                 </ul>
                 Zo kunt u met één gemakkelijk zoekfunctie direct informatie verkrijgen over alle OV Fiets Locaties in Nederland en zo voorkomen
                 dat je voor verrassingen komt te staan.
-                <p></p>
+                </p>
 
                 <p>De OV Fiets app maakt gebruik van een externe API, wat deel uitmaakt van het
                     <a href="http://openov.nl/">openOV</a> data bestand. De API is ontwikkeld door het NS-lab. Deze applicatie is bedoelt als hulpmiddel
