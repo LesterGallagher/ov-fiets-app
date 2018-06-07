@@ -8,23 +8,19 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(
         caches.open(STATIC_CACHE).then(function (cache) {
             return cache.match(event.request).then(function (response) {
-                console.log('cache response', response);
                 if (response) return response;
 
                 return fetch(event.request).then(function (networkResponse) {
-                    console.log('no static cache get network', networkResponse);
                     if (!networkResponse || (networkResponse.status !== 200 && !networkResponse.ok)) {
                         return caches.open(DYNAMIC_CACHE).then(function (dynCache) {
                             return dynCache.match(event.request);
                         }).then(function (dynResponse) {
-                            console.log('got dynamic cache response', dynResponse);
                             if (dynResponse) return dynResponse;
                             else return networkResponse;
                         });
                     }
                     var cachedResponse = networkResponse.clone();
                     caches.open(DYNAMIC_CACHE).then(function (dynCache) {
-                        console.log('succesfull network request putting in dynamic cache');
                         dynCache.put(event.request, cachedResponse);
                     });
                     return networkResponse;
