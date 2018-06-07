@@ -68,7 +68,7 @@ document.addEventListener('init', function (event) {
 				});
 				return;
 			}
-			document.querySelector('#Navigator').pushPage('fietsen.html', { data: { title: selected_station + " OV Fietsen" }, callback: setupSecondaryPage });
+			document.getElementById('Navigator').pushPage('fietsen.html', { data: { title: selected_station + " OV Fietsen" }, callback: setupSecondaryPage });
 		});
 		var station_input = document.getElementById("inputStation");
 		station_input.oninput = onStationInput;
@@ -76,7 +76,7 @@ document.addEventListener('init', function (event) {
 
 
 	} else if (page.id === 'secondary-page') {
-		page.querySelector('ons-toolbar .center').innerHTML = page.data.title;
+		page.querySelector ? page.querySelector('ons-toolbar .center').innerHTML = page.data.title : null;
 		var pullHook = document.getElementById('pull-hook');
 
 		pullHook.removeEventListener('changestate', pullHookChangeStateEventHandler);//remove previous event handlers.
@@ -162,7 +162,7 @@ function pullHookChangeStateEventHandler(event) {
 			break;
 	}
 	RequestAPIData(setupSecondaryPage);//callback "setupSecondaryPage()" to reinitiziate page.
-	pullhook.querySelector("#refreshInfo").innerHTML = message;
+	document.getElementById("refreshInfo").innerHTML = message;
 }
 
 
@@ -170,8 +170,10 @@ function pullHookChangeStateEventHandler(event) {
 //Load data
 
 function RequestAPIData(callback) {
-
-	httpGetJSONRequest("https://jsonp.afeld.me/?url=http://fiets.openov.nl/locaties.json", function (data) {
+	var url = location.protocol != 'https:'
+		? 'http://fiets.openov.nl/locaties.json'
+		: 'https://jsonp.afeld.me/?url=http://fiets.openov.nl/locaties.json';
+	httpGetJSONRequest(url, function (data) {
 		//console.log(data);
 		station_data = data.locaties;
 		station_abrevs = {};
@@ -189,8 +191,8 @@ function RequestAPIData(callback) {
 RequestAPIData();
 setInterval(RequestAPIData, 10 * 60 * 1000 /*10 min*/)
 
-function onStationInput(event, length = 8) {
-
+function onStationInput(event, length) {
+	length = length || 8;
 	var suggestionList = document.getElementById("suggestionList");
 
 	var inputElement = event.srcElement;
@@ -300,19 +302,19 @@ function setupSecondaryPage() {
 	var date = new Date(currstation.extra.fetchTime * 1000);
 
 	var informationParent = document.getElementById("informationParent");
-	informationParent.querySelector("#stationName").innerHTML = currstation.description;
-	informationParent.querySelector("#openClosed").innerHTML = currstation.open === "Yes" ? "Open" : "Gesloten";
+	document.getElementById("stationName").innerHTML = currstation.description;
+	document.getElementById("openClosed").innerHTML = currstation.open === "Yes" ? "Open" : "Gesloten";
 
-	informationParent.querySelector("#rentalBikesCount").innerHTML = (currstation.extra.rentalBikes || 0) + " fietsen beschikbaar";
+	document.getElementById("rentalBikesCount").innerHTML = (currstation.extra.rentalBikes || 0) + " fietsen beschikbaar";
 
 	var minutesAgo = (new Date().getMinutes() - date.getMinutes()).clamp(0, 100);
-	informationParent.querySelector("#lastUpdated").innerHTML = (minutesAgo <= 1) ? "Minder dan 1 minuut geleden" : minutesAgo + " minuten geleden";
+	document.getElementById("lastUpdated").innerHTML = (minutesAgo <= 1) ? "Minder dan 1 minuut geleden" : minutesAgo + " minuten geleden";
 
-	var closingAndOpeningTimes = informationParent.querySelector("#times");
+	var closingAndOpeningTimes = document.getElementById("times");
 	var times = currstation.openingHours;
 	for (let i = 0; i < 7; i++) {
 		var day = IndexToDay(i).toLowerCase();
-		closingAndOpeningTimes.querySelector("#" + day).innerHTML = "Gesloten";
+		document.getElementById(day).innerHTML = "Gesloten";
 	}
 
 	for (let i = 0; i < currstation.openingHours.length; i++) {
@@ -322,11 +324,11 @@ function setupSecondaryPage() {
 		var closingTime = NormalizeTimeString(currstation.openingHours[i].endTime.trim());
 
 		if (openTime !== closingTime && currstation.openingHours[i].closesNextDay) {
-			closingAndOpeningTimes.querySelector("#" + day.toLocaleLowerCase()).innerHTML
+			document.getElementById(day.toLocaleLowerCase()).innerHTML
 				= currstation.openingHours[i].startTime + " - " + currstation.openingHours[i].endTime + " na middernacht";
 		}
 		else {
-			closingAndOpeningTimes.querySelector("#" + day.toLocaleLowerCase()).innerHTML
+			document.getElementById(day.toLocaleLowerCase()).innerHTML
 				= currstation.openingHours[i].startTime + " - " + currstation.openingHours[i].endTime;
 		}
 	}

@@ -2,7 +2,7 @@ var DYNAMIC_CACHE = 'dynamic-cache-v1';
 var STATIC_CACHE = 'static-cache-v1'
 
 // listen for outgoing network request
-self.addEventListener('fetch', (event) => {
+self.addEventListener('fetch', function(event) {
     // try to find response object in the cache
     // associated with current request
     event.respondWith(
