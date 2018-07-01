@@ -1,47 +1,37 @@
 var station_abrevs;
 var selected_station;
 var station_data;
-var cordova_ready = false;
 
-var isOnline = function () {
-	RequestAPIData();
-}, isOffline = function () {
-	ons.notification.alert({
-		message: 'Je bent niet verbonden met het internet. De gegevens die worden weergegeven zijn mogelijk verouderd.',
-	});
-};
+console.log('test');
 
 ons.disableAutoStatusBarFill();
 
-if (window.addEventListener) {
-	/*
-		Works well in Firefox and Opera with the 
-		Work Offline option in the File menu.
-		Pulling the ethernet cable doesn't seem to trigger it.
-		Later Google Chrome and Safari seem to trigger it well
-	*/
-	window.addEventListener("online", isOnline, false);
-	window.addEventListener("offline", isOffline, false);
-}
-else {
-	/*
-		Works in IE with the Work Offline option in the 
-		File menu and pulling the ethernet cable
-	*/
-	document.body.ononline = isOnline;
-	document.body.onoffline = isOffline;
-}
+ons.ready(function () {
+	document.addEventListener("resume", function () {
+		if (navigator.onLine === false) {
+			ons.notification.alert({
+				message: 'Je bent niet verbonden met het internet. De gegevens die worden weergegeven zijn mogelijk verouderd.',
+			});
+		}
+	}, false);
 
-document.addEventListener("resume", function () {
-	if (navigator.onLine === false) {
+	var isOnline = function () {
+		RequestAPIData();
+	}, isOffline = function () {
 		ons.notification.alert({
 			message: 'Je bent niet verbonden met het internet. De gegevens die worden weergegeven zijn mogelijk verouderd.',
 		});
-	}
-}, false)
+	};
 
-document.addEventListener("deviceready", function () {
-	cordova_ready = true;
+	if (window.addEventListener) {
+		window.addEventListener("online", isOnline, false);
+		window.addEventListener("offline", isOffline, false);
+	}
+	else {
+		document.body.ononline = isOnline;
+		document.body.onoffline = isOffline;
+	}
+
 	if (cordova.platformId === 'browser') {
 		document.body.appendChild(document.createElement('script')).src = './js/browser.js';
 	} else {
@@ -52,59 +42,48 @@ document.addEventListener("deviceready", function () {
 			message: 'Je bent niet verbonden met het internet. De gegevens die worden weergegeven zijn mogelijk verouderd.n',
 		});
 	}
-}, false);
 
-//Setup Goo Button for viewing of a particular station.
-document.addEventListener('init', function (event) {
-	var page = event.target;
-	//console.log("button pressed");
+	//Setup Goo Button for viewing of a particular station.
+	document.addEventListener('init', function (event) {
+		var page = event.target;
+		//console.log("button pressed");
 
-	if (page.id === 'main-page') {
-		page.querySelector('#go-button').addEventListener('click', function () {
-			var input = document.getElementById("inputStation").value;
-			if (Object.keys(station_abrevs).includes(input) === false) {
-				ons.notification.alert({
-					message: 'Locatie bestaat niet.',
-				});
-				return;
-			}
-			document.getElementById('Navigator').pushPage('fietsen.html', { data: { title: selected_station + " OV Fietsen" }, callback: setupSecondaryPage });
-		});
-		var station_input = document.getElementById("inputStation");
-		station_input.oninput = onStationInput;
-		//console.log(station_input);
+		if (page.id === 'main-page') {
+			page.querySelector('#go-button').addEventListener('click', function () {
+				var input = document.getElementById("inputStation").value;
+				var keys = [];
+				for (var key in station_abrevs) {
+					keys.push(key);
+				}
+				if (keys.indexOf(input) === -1) {
+					ons.notification.alert({
+						message: 'Locatie bestaat niet.',
+					});
+					return;
+				}
+				document.getElementById('Navigator').pushPage('fietsen.html', { data: { title: selected_station + " OV Fietsen" }, callback: setupSecondaryPage });
+			});
+			var station_input = document.getElementById("inputStation");
+			station_input.oninput = onStationInput;
+		} else if (page.id === 'secondary-page') {
+			page.querySelector ? page.querySelector('ons-toolbar .center').innerHTML = page.data.title : null;
 
+			var abrev = station_abrevs[selected_station];
+			window.currstation = station_data[abrev];
 
-	} else if (page.id === 'secondary-page') {
-		page.querySelector ? page.querySelector('ons-toolbar .center').innerHTML = page.data.title : null;
-		var pullHook = document.getElementById('pull-hook');
-
-		pullHook.removeEventListener('changestate', pullHookChangeStateEventHandler);//remove previous event handlers.
-		pullHook.addEventListener('changestate', pullHookChangeStateEventHandler);
-
-		pullHook.onAction = function (done) {
-			setTimeout(done, 1000);
-		};
-		//var openCloseTimesContainer = document.getElementById("openCloseTimesContainer");
-		//console.log(openCloseTimesContainer)
-
-		var abrev = station_abrevs[selected_station];
-		window.currstation = station_data[abrev];
-
-		window.pageReady = true;
-		preparingMap();
+			window.pageReady = true;
+			preparingMap();
 
 
-		//while(openCloseTimesContainer.firstChild)
-		//	openCloseTimesContainer.removeChild(openCloseTimesContainer.firstChild);
+		}
 
-		//window.create(document.getElementById("openCloseTimesContainer"),currstation.openingHours,new Date().getHours() +":"+ new Date().getMinutes());
+	});
 
-		// create map:
-
-	}
-
+	RequestAPIData();
+	setInterval(RequestAPIData, 2 * 60 * 1000 /*10 min*/);
 });
+
+
 
 function preparingMap() {
 	if (!window.mapsReady || !window.pageReady)
@@ -139,6 +118,8 @@ function preparingMap() {
 	marker.addListener('click', function () {
 		infowindow.open(map, marker);
 	});
+
+
 }
 
 function googleMapsReady() {
@@ -146,29 +127,7 @@ function googleMapsReady() {
 	preparingMap();
 }
 
-function pullHookChangeStateEventHandler(event) {
-	var pullhook = event.srcElement;
-	var message = '';
-
-	switch (event.state) {
-		case 'initial':
-			message = 'Pull to refresh';
-			break;
-		case 'preaction':
-			message = 'Release';
-			break;
-		case 'action':
-			message = 'Loading...';
-			break;
-	}
-	RequestAPIData(setupSecondaryPage);//callback "setupSecondaryPage()" to reinitiziate page.
-	document.getElementById("refreshInfo").innerHTML = message;
-}
-
-
-
 //Load data
-
 function RequestAPIData(callback) {
 	var url = location.protocol != 'https:'
 		? 'http://fiets.openov.nl/locaties.json'
@@ -187,9 +146,6 @@ function RequestAPIData(callback) {
 		onStationInput({ "srcElement": document.getElementById("inputStation") });
 	}, "Something went wrong while connecting to an external server.");//Error message when something goes wrong
 }
-
-RequestAPIData();
-setInterval(RequestAPIData, 10 * 60 * 1000 /*10 min*/)
 
 function onStationInput(event, length) {
 	length = length || 8;
@@ -216,11 +172,11 @@ function onStationInput(event, length) {
 	var regex = new RegExp(input, "i");
 	selected_station = input;
 
-	for (let key in station_abrevs) {
+	for (var key in station_abrevs) {
 		if (regex.test(key)) {//If input 
 			var currstation = station_data[station_abrevs[key]];
 
-			var optionListItem = ons._util.createElement("<ons-list-item ripple modifier='longdivider'></ons-list-item>");
+			var optionListItem = ons._util.createElement("<ons-list-item modifier='longdivider'></ons-list-item>");
 			var optionHref = document.createElement("div");
 			optionHref.setAttribute("class", "left");
 			optionListItem.onclick = function (event) {
@@ -260,36 +216,38 @@ function setupEmptyList(suggestionList, inputElement, length) {
 			- (station_data[a].open.toLocaleLowerCase() === "yes" ? station_data[a].extra.rentalBikes : 0);
 	});
 
-	for (let i = 0; i < length; i++) {
-		var optionListItem = ons._util.createElement("<ons-list-item ripple modifier='longdivider'></ons-list-item>");
-		var optionHref = document.createElement("div");
-		optionHref.setAttribute("class", "left");
-		optionListItem.onclick = function (event) {
-			inputElement.value = station_data[sortedStations[i]].description;
-			selected_station = station_data[sortedStations[i]].description;
-		};
-		optionHref.innerHTML = "<p>" + station_data[sortedStations[i]].description + "</p>";
-		optionListItem.appendChild(optionHref);
+	for (var j = 0; j < length; j++) {
+		(function (i) {
+			var optionListItem = ons._util.createElement("<ons-list-item modifier='longdivider'></ons-list-item>");
+			var optionHref = document.createElement("div");
+			optionHref.setAttribute("class", "left");
+			optionListItem.onclick = function (event) {
+				inputElement.value = station_data[sortedStations[i]].description;
+				selected_station = station_data[sortedStations[i]].description;
+			};
+			optionHref.innerHTML = "<p>" + station_data[sortedStations[i]].description + "</p>";
+			optionListItem.appendChild(optionHref);
 
 
-		var rightelem = document.createElement("div");
-		rightelem.setAttribute("class", "right");
+			var rightelem = document.createElement("div");
+			rightelem.setAttribute("class", "right");
 
 
-		var dummy = document.createElement("div");
-		dummy.setAttribute("class", "center");
-		optionListItem.appendChild(dummy);
+			var dummy = document.createElement("div");
+			dummy.setAttribute("class", "center");
+			optionListItem.appendChild(dummy);
 
-		var isOpen = (station_data[sortedStations[i]].open.toLowerCase() == "yes");
-
-
-		rightelem.innerHTML = isOpen ? "<ons-icon icon='ion-android-bicycle'>&#32;" + (station_data[sortedStations[i]].extra.rentalBikes || 0) + "</ons-icon>"
-			: "<ons-icon icon='ion-alert-circled' color='red'></ons-icon>";
+			var isOpen = (station_data[sortedStations[i]].open.toLowerCase() == "yes");
 
 
-		optionListItem.appendChild(rightelem);
-		suggestionList.appendChild(optionListItem);
+			rightelem.innerHTML = isOpen ? "<ons-icon icon='ion-android-bicycle'>&#32;" + (station_data[sortedStations[i]].extra.rentalBikes || 0) + "</ons-icon>"
+				: "<ons-icon icon='ion-alert-circled' color='red'></ons-icon>";
 
+
+			optionListItem.appendChild(rightelem);
+			suggestionList.appendChild(optionListItem);
+
+		})(j);
 	}
 }
 
@@ -312,12 +270,12 @@ function setupSecondaryPage() {
 
 	var closingAndOpeningTimes = document.getElementById("times");
 	var times = currstation.openingHours;
-	for (let i = 0; i < 7; i++) {
+	for (var i = 0; i < 7; i++) {
 		var day = IndexToDay(i).toLowerCase();
 		document.getElementById(day).innerHTML = "Gesloten";
 	}
 
-	for (let i = 0; i < currstation.openingHours.length; i++) {
+	for (var i = 0; i < currstation.openingHours.length; i++) {
 		var day = IndexToDay(currstation.openingHours[i].dayOfWeek - 1);
 
 		var openTime = NormalizeTimeString(currstation.openingHours[i].startTime.trim());
@@ -333,3 +291,10 @@ function setupSecondaryPage() {
 		}
 	}
 }
+
+function blockTouchMove(event) {
+	console.log(event);
+	event.preventDefault();
+	event.stopPropagation();
+}
+
