@@ -2,8 +2,6 @@ var station_abrevs;
 var selected_station;
 var station_data;
 
-console.log('test');
-
 ons.disableAutoStatusBarFill();
 
 document.addEventListener("resume", function () {
@@ -127,7 +125,6 @@ function RequestAPIData(callback) {
 		? 'http://fiets.openov.nl/locaties.json'
 		: 'https://jsonp.afeld.me/?url=http://fiets.openov.nl/locaties.json';
 	httpGetJSONRequest(url, function (data) {
-		//console.log(data);
 		station_data = data.locaties;
 		station_abrevs = {};
 		for (var key in station_data) {
@@ -245,8 +242,6 @@ function setupSecondaryPage() {
 	var abrev = station_abrevs[selected_station];
 	var currstation = station_data[abrev];
 
-	//console.log("this will be displayed on the page:",currstation);
-
 	var date = new Date(currstation.extra.fetchTime * 1000);
 
 	var informationParent = document.getElementById("informationParent");
@@ -283,7 +278,6 @@ function setupSecondaryPage() {
 }
 
 function blockTouchMove(event) {
-	console.log(event);
 	event.preventDefault();
 	event.stopPropagation();
 }

@@ -57,10 +57,6 @@ self.addEventListener('fetch', function (event) {
     );
 });
 
-self.addEventListener('activate', function (event) {
-    console.log('service worker activate');
-});
-
 self.addEventListener('install', function (event) {
     event.waitUntil(
         caches.open(STATIC_CACHE).then(function (cache) {
