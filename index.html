@@ -64,10 +64,9 @@
                             </p>
                         </div>
                         <div class="right">
-                            <ons-button modifier="material" disable-auto-styling id="go-button">Go!</ons-button>
+                            <ons-button id="go-button">Go!</ons-button>
                         </div>
                     </ons-list-item>
-
                 </ons-list>
                 <ons-list modifier="inset" id="suggestionList" style="width:100%; margin: 10px 0px;">
                 </ons-list>
@@ -208,6 +207,8 @@
         </ons-page>
     </ons-template>
 
+    <div id="wait"></div>
+
     <!-- [if IE]>
             <div id="oldbrowser-modal" class="modal" role="dialog" aria-expanded="true" style="position: fixed; z-index: 200000; padding-top: 100px; left: 0px; top: 0px; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.9); transition: padding-top 100ms ease-out; box-sizing: border-box; font-family: 'Ubuntu', sans-serif, Verdana, Geneva, Tahoma;">
                 <div class="modal-content" style="margin: auto; display: block; width: 80%; max-width: 700px; padding: 40px; background: white; box-sizing: border-box; ;">
@@ -240,7 +241,7 @@
     <!-- This may not be loaded when in webview and offline (sw will cache it offline in modern browsers). Lets hope android webviews dont need any polyfills -->
     <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
     <script src="cordova.js"></script>
-    <script src="lib/onsen/js/onsenui.js"></script>
+    <script src="lib/onsen/js/onsenui.min.js"></script>
     <script src="js/core.js"></script>
     <script src="js/index.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAbYEmso1zTDnlSWBg6ojxMXEletMWmHN4&callback=googleMapsReady"></script>

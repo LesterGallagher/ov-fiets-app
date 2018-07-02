@@ -6,15 +6,46 @@ console.log('test');
 
 ons.disableAutoStatusBarFill();
 
-ons.ready(function () {
-	document.addEventListener("resume", function () {
-		if (navigator.onLine === false) {
-			ons.notification.alert({
-				message: 'Je bent niet verbonden met het internet. De gegevens die worden weergegeven zijn mogelijk verouderd.',
-			});
-		}
-	}, false);
+document.addEventListener("resume", function () {
+	if (navigator.onLine === false) {
+		ons.notification.alert({
+			message: 'Je bent niet verbonden met het internet. De gegevens die worden weergegeven zijn mogelijk verouderd.',
+		});
+	}
+}, false);
 
+document.addEventListener('init', function (event) {
+	var page = event.target;
+
+	if (page.id === 'main-page') {
+		page.querySelector('#go-button').addEventListener('click', function () {
+			var input = document.getElementById("inputStation").value;
+			var keys = [];
+			for (var key in station_abrevs) {
+				keys.push(key);
+			}
+			if (keys.indexOf(input) === -1) {
+				ons.notification.alert({
+					message: 'Locatie bestaat niet.',
+				});
+				return;
+			}
+			document.getElementById('Navigator').pushPage('fietsen.html', { data: { title: selected_station + " OV Fietsen" }, callback: setupSecondaryPage });
+		});
+		var station_input = document.getElementById("inputStation");
+		station_input.oninput = onStationInput;
+	} else if (page.id === 'secondary-page') {
+		page.querySelector ? page.querySelector('ons-toolbar .center').innerHTML = page.data.title : null;
+
+		var abrev = station_abrevs[selected_station];
+		window.currstation = station_data[abrev];
+
+		window.pageReady = true;
+		preparingMap();
+	}
+});
+
+ons.ready(function () {
 	var isOnline = function () {
 		RequestAPIData();
 	}, isOffline = function () {
@@ -37,53 +68,18 @@ ons.ready(function () {
 	} else {
 		document.body.appendChild(document.createElement('script')).src = './js/admob.js';
 	}
+
 	if (navigator.onLine === false) {
 		ons.notification.alert({
 			message: 'Je bent niet verbonden met het internet. De gegevens die worden weergegeven zijn mogelijk verouderd.n',
 		});
 	}
 
-	//Setup Goo Button for viewing of a particular station.
-	document.addEventListener('init', function (event) {
-		var page = event.target;
-		//console.log("button pressed");
-
-		if (page.id === 'main-page') {
-			page.querySelector('#go-button').addEventListener('click', function () {
-				var input = document.getElementById("inputStation").value;
-				var keys = [];
-				for (var key in station_abrevs) {
-					keys.push(key);
-				}
-				if (keys.indexOf(input) === -1) {
-					ons.notification.alert({
-						message: 'Locatie bestaat niet.',
-					});
-					return;
-				}
-				document.getElementById('Navigator').pushPage('fietsen.html', { data: { title: selected_station + " OV Fietsen" }, callback: setupSecondaryPage });
-			});
-			var station_input = document.getElementById("inputStation");
-			station_input.oninput = onStationInput;
-		} else if (page.id === 'secondary-page') {
-			page.querySelector ? page.querySelector('ons-toolbar .center').innerHTML = page.data.title : null;
-
-			var abrev = station_abrevs[selected_station];
-			window.currstation = station_data[abrev];
-
-			window.pageReady = true;
-			preparingMap();
-
-
-		}
-
-	});
-
 	RequestAPIData();
 	setInterval(RequestAPIData, 2 * 60 * 1000 /*10 min*/);
+
+	document.getElementById('wait').style.display = 'none';
 });
-
-
 
 function preparingMap() {
 	if (!window.mapsReady || !window.pageReady)
@@ -118,8 +114,6 @@ function preparingMap() {
 	marker.addListener('click', function () {
 		infowindow.open(map, marker);
 	});
-
-
 }
 
 function googleMapsReady() {
@@ -160,14 +154,10 @@ function onStationInput(event, length) {
 
 	suggestionList.appendChild(ons._util.createElement("<ons-list-header modifier='longdivider'>Stations</ons-list-header>"));
 
-
-
 	if (input.trim().length == 0) {
 		setupEmptyList(suggestionList, inputElement, length);
 		return;
 	}
-
-
 
 	var regex = new RegExp(input, "i");
 	selected_station = input;
@@ -176,7 +166,7 @@ function onStationInput(event, length) {
 		if (regex.test(key)) {//If input 
 			var currstation = station_data[station_abrevs[key]];
 
-			var optionListItem = ons._util.createElement("<ons-list-item modifier='longdivider'></ons-list-item>");
+			var optionListItem = ons._util.createElement("<ons-list-item ripple modifier='longdivider'></ons-list-item>");
 			var optionHref = document.createElement("div");
 			optionHref.setAttribute("class", "left");
 			optionListItem.onclick = function (event) {
@@ -218,7 +208,7 @@ function setupEmptyList(suggestionList, inputElement, length) {
 
 	for (var j = 0; j < length; j++) {
 		(function (i) {
-			var optionListItem = ons._util.createElement("<ons-list-item modifier='longdivider'></ons-list-item>");
+			var optionListItem = ons._util.createElement("<ons-list-item ripple modifier='longdivider'></ons-list-item>");
 			var optionHref = document.createElement("div");
 			optionHref.setAttribute("class", "left");
 			optionListItem.onclick = function (event) {
