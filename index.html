@@ -2,7 +2,6 @@
 <html lang="nl-NL">
 
 <head>
-
     <meta http-equiv="Content-Security-Policy" content="
         default-src 'self' data: gap: https://ssl.gstatic.com http://*.tile.osm.org https://*.googleapis.com; 
         style-src 'self' 'unsafe-inline' https://*.gstatic.com http://*.tile.osm.org https://*.googleapis.com;
@@ -34,7 +33,7 @@
     <meta name="author" content="Sem Postma, sem.postma@gmail.com">
     <meta name="keywords" content="Ov, Fiets, App, Website, Informatie, Vervoer, Verkeer, Openbaar, Huur, Locaties, Browser, Google, Play">
 
-    <link rel="stylesheet" href="lib/onsen/css/onsenui.css" />
+    <link rel="stylesheet" href="lib/onsen/css/onsenui.min.css" />
     <link rel="stylesheet" href="lib/onsen/css/onsen-css-components.min.css" />
 
     <link rel="stylesheet" type="text/css" href="css/index.css">
@@ -50,7 +49,7 @@
             <ons-toolbar>
                 <div class="center">OV Fiets App</div>
                 <div class="right">
-                    <ons-toolbar-button onclick=" document.querySelector('#Navigator').pushPage('about.html');">
+                    <ons-toolbar-button onclick="document.querySelector('#Navigator').pushPage('about.html');">
                         <ons-icon icon="ion-help"></ons-icon>
                     </ons-toolbar-button>
                 </div>
@@ -86,77 +85,73 @@
 
             </ons-toolbar>
 
-            <!-- <ons-pull-hook id="pull-hook"> -->
-                <!-- <p id="refreshInfo">Pull to refresh</p> -->
+            <div id="informationParent">
+                <ons-list>
+                    <ons-list-header>Locatie</ons-list-header>
+                    <ons-list-item class="second-page-list-item">
+                        <p id="stationName"></p>
+                    </ons-list-item>
+                    <ons-list-item class="second-page-list-item">
+                        <div id="stationMap" ontouchmove="blockTouchMove(event)"></div>
+                    </ons-list-item>
 
-                <div id="informationParent">
-                    <ons-list>
-                        <ons-list-header>Locatie</ons-list-header>
-                        <ons-list-item class="second-page-list-item">
-                            <p id="stationName"></p>
-                        </ons-list-item>
-                        <ons-list-item class="second-page-list-item">
-                            <div id="stationMap" ontouchmove="blockTouchMove(event)"></div>
-                        </ons-list-item>
+                    <ons-list-header>Status</ons-list-header>
+                    <ons-list-item class="second-page-list-item">
+                        <p id="openClosed"></p>
+                    </ons-list-item>
 
-                        <ons-list-header>Status</ons-list-header>
-                        <ons-list-item class="second-page-list-item">
-                            <p id="openClosed"></p>
-                        </ons-list-item>
+                    <ons-list-header>OV Fietsen</ons-list-header>
+                    <ons-list-item class="second-page-list-item">
+                        <p id="rentalBikesCount"></p>
+                    </ons-list-item>
 
-                        <ons-list-header>OV Fietsen</ons-list-header>
-                        <ons-list-item class="second-page-list-item">
-                            <p id="rentalBikesCount"></p>
-                        </ons-list-item>
+                    <ons-list-header>Laatste Update</ons-list-header>
+                    <ons-list-item class="second-page-list-item">
+                        <p id="lastUpdated"></p>
+                    </ons-list-item>
 
-                        <ons-list-header>Laatste Update</ons-list-header>
-                        <ons-list-item class="second-page-list-item">
-                            <p id="lastUpdated"></p>
-                        </ons-list-item>
+                    <ons-list-header>OpeningsTijden</ons-list-header>
+                    <ons-list-item class="second-page-list-item" id="times">
+                        <ons-list class="second-page-list-item" modifier="inset" style="width:75%;">
+                            <ons-list-header>Maandag</ons-list-header>
+                            <ons-list-item class="second-page-list-item">
+                                <p id="monday"></p>
+                            </ons-list-item>
 
-                        <ons-list-header>OpeningsTijden</ons-list-header>
-                        <ons-list-item class="second-page-list-item" id="times">
-                            <ons-list class="second-page-list-item" modifier="inset" style="width:75%;">
-                                <ons-list-header>Maandag</ons-list-header>
-                                <ons-list-item class="second-page-list-item">
-                                    <p id="monday"></p>
-                                </ons-list-item>
+                            <ons-list-header>Dinsdag</ons-list-header>
+                            <ons-list-item class="second-page-list-item">
+                                <p id="tuesday"></p>
+                            </ons-list-item>
 
-                                <ons-list-header>Dinsdag</ons-list-header>
-                                <ons-list-item class="second-page-list-item">
-                                    <p id="tuesday"></p>
-                                </ons-list-item>
+                            <ons-list-header>Woensdag</ons-list-header>
+                            <ons-list-item class="second-page-list-item">
+                                <p id="wednesday"></p>
+                            </ons-list-item>
 
-                                <ons-list-header>Woensdag</ons-list-header>
-                                <ons-list-item class="second-page-list-item">
-                                    <p id="wednesday"></p>
-                                </ons-list-item>
+                            <ons-list-header>Donderdag</ons-list-header>
+                            <ons-list-item class="second-page-list-item">
+                                <p id="thursday"></p>
+                            </ons-list-item>
 
-                                <ons-list-header>Donderdag</ons-list-header>
-                                <ons-list-item class="second-page-list-item">
-                                    <p id="thursday"></p>
-                                </ons-list-item>
+                            <ons-list-header>Vrijdag</ons-list-header>
+                            <ons-list-item class="second-page-list-item">
+                                <p id="friday"></p>
+                            </ons-list-item>
 
-                                <ons-list-header>Vrijdag</ons-list-header>
-                                <ons-list-item class="second-page-list-item">
-                                    <p id="friday"></p>
-                                </ons-list-item>
+                            <ons-list-header>Zaterdag</ons-list-header>
+                            <ons-list-item class="second-page-list-item">
+                                <p id="saturday"></p>
+                            </ons-list-item>
 
-                                <ons-list-header>Zaterdag</ons-list-header>
-                                <ons-list-item class="second-page-list-item">
-                                    <p id="saturday"></p>
-                                </ons-list-item>
+                            <ons-list-header>Zondag</ons-list-header>
+                            <ons-list-item class="second-page-list-item">
+                                <p id="sunday"></p>
+                            </ons-list-item>
 
-                                <ons-list-header>Zondag</ons-list-header>
-                                <ons-list-item class="second-page-list-item">
-                                    <p id="sunday"></p>
-                                </ons-list-item>
-
-                            </ons-list>
-                        </ons-list-item>
-                    </ons-list>
-                </div>
-            <!-- </ons-pull-hook> -->
+                        </ons-list>
+                    </ons-list-item>
+                </ons-list>
+            </div>
         </ons-page>
     </ons-template>
 
@@ -228,9 +223,10 @@
             <div class="modal-content" style="margin: auto; display: block; width: 80%; max-width: 700px; padding: 40px; background: white; box-sizing: border-box; ;">
                 <h2 class="text-danger mt-1 mb-4" style="color: rgb(236, 78, 32); margin-top: 6px; margin-bottom: 36px; box-sizing: border-box; ;">Belangrijk!</h2>
                 <p class="noscript-msg" style="box-sizing: border-box; ;">
-                    Deze website vereist het gebruik van javascript. <br>
+                    Deze website vereist het gebruik van javascript.
+                    <br>
                     <a href="https://www.enable-javascript.com/" target="_blank" class="text-primary" style="background-color: transparent; color: rgb(1, 111, 185); box-sizing: border-box; text-decoration: none; ;">
-                    Hier vind u instructies voor het aanzetten van javascript</a>.
+                        Hier vind u instructies voor het aanzetten van javascript</a>.
                 </p>
             </div>
         </div>
@@ -247,4 +243,5 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAbYEmso1zTDnlSWBg6ojxMXEletMWmHN4&callback=googleMapsReady"></script>
 
 </body>
+
 </html>

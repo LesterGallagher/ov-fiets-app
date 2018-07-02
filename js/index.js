@@ -71,7 +71,7 @@ ons.ready(function () {
 
 	if (navigator.onLine === false) {
 		ons.notification.alert({
-			message: 'Je bent niet verbonden met het internet. De gegevens die worden weergegeven zijn mogelijk verouderd.n',
+			message: 'Je bent niet verbonden met het internet. De gegevens die worden weergegeven zijn mogelijk verouderd',
 		});
 	}
 
