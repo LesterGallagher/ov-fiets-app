@@ -3,8 +3,8 @@ if (navigator['serviceWorker']) {
 }
 
 if (navigator.userAgent.indexOf('MSIE') !== -1
-	|| navigator.appVersion.indexOf('Trident/') > 0) {
-	document.body.appendChild(document.createElement('div')).innerHTML = '<div id="oldbrowser-modal" class="modal" role="dialog" aria-expanded="true" \
+    || navigator.appVersion.indexOf('Trident/') > 0) {
+    document.body.appendChild(document.createElement('div')).innerHTML = '<div id="oldbrowser-modal" class="modal" role="dialog" aria-expanded="true" \
 	style="position: fixed; z-index: 200000; padding-top: 100px; left: 0px; top: 0px; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.9); \
 	transition: padding-top 100ms ease-out; box-sizing: border-box; font-family: "Ubuntu", sans-serif, Verdana, Geneva, Tahoma;">\
 	<div class="modal-content" style="margin: auto; display: block; width: 80%; max-width: 700px; padding: 40px; background: white; box-sizing: border-box; ;">\
@@ -19,10 +19,18 @@ if (navigator.userAgent.indexOf('MSIE') !== -1
 </div>'.split('\n').join('');
 }
 
+// GA
+var googletag = document.createElement('script');
+googletag.src = 'https://www.googletagmanager.com/gtag/js?id=UA-90014538-14';
+window.dataLayer = window.dataLayer || [];
+function gtag() { dataLayer.push(arguments); }
+gtag('js', new Date());
+gtag('config', 'UA-90014538-14');
+document.head.appendChild(googletag);
 
 var installPromptEvent;
 
-window.addEventListener('beforeinstallprompt', function(event) {
+window.addEventListener('beforeinstallprompt', function (event) {
     // Prevent Chrome <= 67 from automatically showing the prompt
     event.preventDefault();
     // Stash the event so it can be triggered later.
@@ -48,7 +56,7 @@ function pwaHomeScreenInstall() {
     // Show the modal add to home screen dialog
     installPromptEvent.prompt();
     // Wait for the user to respond to the prompt
-    installPromptEvent.userChoice.then(function(choice) {
+    installPromptEvent.userChoice.then(function (choice) {
         if (choice.outcome === 'accepted') {
             console.log('User accepted the A2HS prompt');
         } else {

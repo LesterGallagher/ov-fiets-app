@@ -169,8 +169,11 @@ function onStationInput(event, length) {
 			optionListItem.onclick = function (event) {
 				inputElement.value = key;
 				selected_station = key;
+
+				document.getElementById('Navigator').pushPage('fietsen.html', { data: { title: selected_station + " OV Fietsen" }, callback: setupSecondaryPage });
 			};
-			optionHref.innerHTML = "<p>" + key + "</p>";
+			optionHref.innerHTML += '<ons-ripple></ons-ripple>'
+			optionHref.innerHTML += "<p>" + key + "</p>";
 			optionListItem.appendChild(optionHref);
 
 			var rightelem = document.createElement("div");
@@ -211,8 +214,11 @@ function setupEmptyList(suggestionList, inputElement, length) {
 			optionListItem.onclick = function (event) {
 				inputElement.value = station_data[sortedStations[i]].description;
 				selected_station = station_data[sortedStations[i]].description;
+				
+				document.getElementById('Navigator').pushPage('fietsen.html', { data: { title: selected_station + " OV Fietsen" }, callback: setupSecondaryPage });
 			};
-			optionHref.innerHTML = "<p>" + station_data[sortedStations[i]].description + "</p>";
+			optionHref.innerHTML += '<ons-ripple></ons-ripple>'
+			optionHref.innerHTML += "<p>" + station_data[sortedStations[i]].description + "</p>";
 			optionListItem.appendChild(optionHref);
 
 

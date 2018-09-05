@@ -58,6 +58,13 @@ a:active {
     height: 100px;
 }
 
+.ion-android-bicycle::before {
+    content: url('ionicons_android_bicycle.png');
+    height: 27px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
 /* ---------------------------------------------------------- */
 
 #wait {
