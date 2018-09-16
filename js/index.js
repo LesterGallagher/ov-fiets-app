@@ -161,39 +161,42 @@ function onStationInput(event, length) {
 
 	for (var key in station_abrevs) {
 		if (regex.test(key)) {//If input 
-			var currstation = station_data[station_abrevs[key]];
+			(function (key) {
 
-			var optionListItem = ons._util.createElement("<ons-list-item ripple modifier='longdivider'></ons-list-item>");
-			var optionHref = document.createElement("div");
-			optionHref.setAttribute("class", "left");
-			optionListItem.onclick = function (event) {
-				inputElement.value = key;
-				selected_station = key;
+				var currstation = station_data[station_abrevs[key]];
 
-				document.getElementById('Navigator').pushPage('fietsen.html', { data: { title: selected_station + " OV Fietsen" }, callback: setupSecondaryPage });
-			};
-			optionHref.innerHTML += '<ons-ripple></ons-ripple>'
-			optionHref.innerHTML += "<p>" + key + "</p>";
-			optionListItem.appendChild(optionHref);
+				var optionListItem = ons._util.createElement("<ons-list-item ripple modifier='longdivider'></ons-list-item>");
+				var optionHref = document.createElement("div");
+				optionHref.setAttribute("class", "left");
+				optionListItem.onclick = function (event) {
+					inputElement.value = key;
+					selected_station = key;
 
-			var rightelem = document.createElement("div");
-			rightelem.setAttribute("class", "right");
+					document.getElementById('Navigator').pushPage('fietsen.html', { data: { title: selected_station + " OV Fietsen" }, callback: setupSecondaryPage });
+				};
+				optionHref.innerHTML += '<ons-ripple></ons-ripple>'
+				optionHref.innerHTML += "<p>" + key + "</p>";
+				optionListItem.appendChild(optionHref);
 
-			var dummy = document.createElement("div");
-			dummy.setAttribute("class", "center");
-			optionListItem.appendChild(dummy);
+				var rightelem = document.createElement("div");
+				rightelem.setAttribute("class", "right");
 
-			var isOpen = (currstation.open.toLowerCase() == "yes");
+				var dummy = document.createElement("div");
+				dummy.setAttribute("class", "center");
+				optionListItem.appendChild(dummy);
 
-
-			rightelem.innerHTML = isOpen ? "<ons-icon icon='ion-android-bicycle'>&#32;" + (currstation.extra.rentalBikes || 0) + "</ons-icon>"
-				: "<ons-icon icon='ion-alert-circled' color='red'></ons-icon>";
+				var isOpen = (currstation.open.toLowerCase() == "yes");
 
 
+				rightelem.innerHTML = isOpen ? "<ons-icon icon='ion-android-bicycle'>&#32;" + (currstation.extra.rentalBikes || 0) + "</ons-icon>"
+					: "<ons-icon icon='ion-alert-circled' color='red'></ons-icon>";
 
-			optionListItem.appendChild(rightelem);
-			suggestionList.appendChild(optionListItem);
 
+
+				optionListItem.appendChild(rightelem);
+				suggestionList.appendChild(optionListItem);
+
+			})(key);
 			if (--length <= 0) break;
 		}
 	}
@@ -214,7 +217,7 @@ function setupEmptyList(suggestionList, inputElement, length) {
 			optionListItem.onclick = function (event) {
 				inputElement.value = station_data[sortedStations[i]].description;
 				selected_station = station_data[sortedStations[i]].description;
-				
+
 				document.getElementById('Navigator').pushPage('fietsen.html', { data: { title: selected_station + " OV Fietsen" }, callback: setupSecondaryPage });
 			};
 			optionHref.innerHTML += '<ons-ripple></ons-ripple>'
