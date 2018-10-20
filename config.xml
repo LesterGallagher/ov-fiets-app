@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.EchoSierraStudio.Ov_Fiets_App" version="1.2.3" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.EchoSierraStudio.Ov_Fiets_App" version="1.2.4" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>OV Fiets App</name>
     <description>
         Met de OV Fiets App kunt u gemakkelijk informatie opzoeken over OV Fiets huurlocaties. 
     </description>
-    <author email="polyismstudio@gmail.com" href="http://polyism.portfoliobox.net/">
+    <author email="polyismstudio@gmail.com" href="https://esstudio.site">
         Sem Postma
     </author>
     <content src="index.html" />
@@ -18,5 +18,6 @@
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
+    <preference name="StatusBarBackgroundColor" value="#ddad00" />
     <preference name="orientation" value="portrait" />
 </widget>

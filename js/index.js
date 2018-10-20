@@ -63,6 +63,7 @@ ons.ready(function () {
 
 	if (cordova.platformId === 'browser') {
 		document.body.appendChild(document.createElement('script')).src = './js/browser.js';
+		document.body.appendChild(document.createElement('script')).src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
 	} else {
 		document.body.appendChild(document.createElement('script')).src = './js/admob.js';
 	}
@@ -261,6 +262,13 @@ function setupSecondaryPage() {
 
 	var minutesAgo = (new Date().getMinutes() - date.getMinutes()).clamp(0, 100);
 	document.getElementById("lastUpdated").innerHTML = (minutesAgo <= 1) ? "Minder dan 1 minuut geleden" : minutesAgo + " minuten geleden";
+
+	document.getElementById('station-adsense-container').innerHTML = '<!-- Adsense (only works in browser) -->\
+	<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-9732535637352249" data-ad-slot="1658132306" data-ad-format="auto"\
+	data-full-width-responsive="true"></ins>';
+	setTimeout(function() {
+		(adsbygoogle = window.adsbygoogle || []).push({});
+	}, 0);
 
 	var closingAndOpeningTimes = document.getElementById("times");
 	var times = currstation.openingHours;
