@@ -93,3 +93,7 @@ a:active {
 #inputStation {
     width: 100%;
 }
+
+#main-page .page__content {
+    overflow-y: scroll;
+}
