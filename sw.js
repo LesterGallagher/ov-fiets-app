@@ -3,21 +3,10 @@ var STATIC_CACHE = 'static-cache-v1';
 
 var toCache = [
     '',
-    'lib/onsen/css/onsenui.min.css',
-    'lib/onsen/css/onsen-css-components.min.css',
-    'css/index.css',
+    'style.min.css',
     'https://cdn.polyfill.io/v2/polyfill.min.js',
-    'cordova.js',
-    'lib/onsen/js/onsenui.min.js',
-    'js/core.js',
-    'js/index.js',
-    'cordova_plugins.js',
-    'plugins/cordova-plugin-admobpro/www/AdMob.js',
-    'plugins/cordova-plugin-device/www/device.js',
-    'plugins/cordova-plugin-device/src/browser/DeviceProxy.js',
-    'plugins/cordova-plugin-dialogs/www/notification.js',
-    'plugins/cordova-plugin-dialogs/www/browser/notification.js',
-    'js/browser.js',
+    'app.min.js',
+    'index.html'
 ];
 
 // listen for outgoing network request
